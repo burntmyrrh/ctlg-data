@@ -9,6 +9,9 @@ import { toPinyin } from "./pinyin.mjs";
 
 const maxReleasesPerRun = 4;
 
+const GITHUB_OWNER = "Cataclysm-TLG";
+const GITHUB_REPO = "Cataclysm-TLG";
+
 function breakJSONIntoSingleObjects(str) {
   const objs = [];
   let depth = 0;
@@ -74,10 +77,7 @@ function postprocessPoJson(jsonData) {
   return json;
 }
 
-const forbiddenTags = [
-  "cdda-experimental-2021-07-09-1837", // this release had broken json
-  "cdda-experimental-2021-07-09-1719",
-];
+const forbiddenTags = [];
 
 /** @param {string | Buffer} zip */
 function glob(zip) {
@@ -127,12 +127,12 @@ export default async function run({ github, context, dryRun = false }) {
   console.log("Fetching release list...");
 
   const { data: releases } = await github.rest.repos.listReleases({
-    owner: "CleverRaven",
-    repo: "Cataclysm-DDA",
+    owner: GITHUB_OWNER,
+    repo: GITHUB_REPO,
   });
 
   const latestRelease = releases.find((r) =>
-    r.tag_name.startsWith("cdda-experimental-"),
+    r.tag_name.startsWith("cataclysm-tlg-"),
   )?.tag_name;
 
   console.log(`Latest experimental: ${latestRelease}`);
@@ -270,16 +270,16 @@ export default async function run({ github, context, dryRun = false }) {
     Math.max(0, maxReleasesPerRun - releaseQueue.length),
   )) {
     const { data: release } = await github.rest.repos.getReleaseByTag({
-      owner: "CleverRaven",
-      repo: "Cataclysm-DDA",
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
       tag: build.build_number,
     });
     releaseQueue.push({ release, backfill: true });
   }
 
   const translationArtifacts = await github.rest.actions.listArtifactsForRepo({
-    owner: "CleverRaven",
-    repo: "Cataclysm-DDA",
+    owner: GITHUB_OWNER,
+    repo: GITHUB_REPO,
     name: "translations",
     per_page: 100,
   });
@@ -299,8 +299,8 @@ export default async function run({ github, context, dryRun = false }) {
     console.log(`Fetching source...`);
 
     const { data: zip } = await github.rest.repos.downloadZipballArchive({
-      owner: "CleverRaven",
-      repo: "Cataclysm-DDA",
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
       ref: tag_name,
     });
 
@@ -415,8 +415,8 @@ export default async function run({ github, context, dryRun = false }) {
       console.log("Found translations artifact")
 
       const { data: zip } = await github.rest.actions.downloadArtifact({
-        owner: "CleverRaven",
-        repo: "Cataclysm-DDA",
+        owner: GITHUB_OWNER,
+        repo: GITHUB_REPO,
         artifact_id: relevantTranslationArtifact.id,
         archive_format: "zip"
       });
@@ -535,8 +535,8 @@ export default async function run({ github, context, dryRun = false }) {
     message: commitMessage,
     tree: tree.sha,
     author: {
-      name: "HHG2C Update Bot",
-      email: "hhg2c@users.noreply.github.com",
+      name: "CTLG Update Bot",
+      email: "ctlg-update-bot@foobaz.com",
     },
   });
 

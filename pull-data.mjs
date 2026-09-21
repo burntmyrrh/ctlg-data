@@ -234,10 +234,10 @@ export default async function run({ github, context, dryRun = false }) {
   }
 
   console.log("Collecting info from existing builds...");
-  // const { data: baseCommit } = await github.rest.repos.getCommit({
-  //   ...context.repo,
-  //   ref: dataBranch,
-  // });
+  const { data: baseCommit } = await github.rest.repos.getCommit({
+    ...context.repo,
+    ref: dataBranch,
+  });
   console.log(1);
 
   const existingAllBuildsJson = []; // await fetchRawFile("all-builds.json");

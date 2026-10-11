@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "adm-zip": "^0.5.12",
+    "gettext.js": "^1.2.0",
+    "octokit": "^4.0.2",
+    "pinyin": "^3.0.0-alpha.5"
+  }
+}
